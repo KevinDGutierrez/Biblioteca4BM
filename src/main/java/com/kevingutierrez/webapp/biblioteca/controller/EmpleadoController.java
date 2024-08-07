@@ -16,54 +16,58 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kevingutierrez.webapp.biblioteca.model.Categoria;
-import com.kevingutierrez.webapp.biblioteca.service.CategoriaService;
+import com.kevingutierrez.webapp.biblioteca.model.Empleado;
+import com.kevingutierrez.webapp.biblioteca.service.EmpleadoService;
 
 @Controller
 @RestController
 @RequestMapping("")
-public class CategoriaController {
-
-    @Autowired
-    CategoriaService categoriaService;
+public class EmpleadoController {
     
-    @GetMapping("/categorias")
-    public List<Categoria> listaCategorias(){
-        return categoriaService.listarCategorias();
+    @Autowired
+    EmpleadoService empleadoService;
+
+    @GetMapping("/empleados")
+    public List<Empleado> listaEmpleados(){
+        return empleadoService.listarEmpleados();
     }
 
-    @GetMapping("/categoria")
-    public ResponseEntity<Categoria> buscarCategoriaPorId(@RequestParam Long id){
+    @GetMapping("/empleado")
+    public ResponseEntity<Empleado> buscarEmpleadoPorId(@RequestParam Long id){
         try {
-           Categoria categoria = categoriaService.buscarCategoriaPorId(id);
-           return ResponseEntity.ok(categoria); 
+           Empleado empleado = empleadoService.buscarEmpleadoPorId(id);
+           return ResponseEntity.ok(empleado); 
         } catch (Exception e) {
            return ResponseEntity.badRequest().body(null);
         }
     }
 
-    @PostMapping("/categoria")
-    public ResponseEntity<Map<String, String>> agregarCategoria(@RequestBody Categoria categoria){
+    @PostMapping("/empleado")
+    public ResponseEntity<Map<String, String>> agregarEmpleado(@RequestBody Empleado empleado){
         Map<String, String> response = new HashMap<>();
         try {
-            categoriaService.guardarCategoria(categoria);
-            response.put("message", "categoria creada con éxito!!");
+            empleadoService.guardarEmpleado(empleado);
+            response.put("message", "Empleado creado con éxito!!");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("message", "Error");
-            response.put("err", "Hubo un error al crear la categoria");
+            response.put("err", "Hubo un error al crear el empeleado");
             return ResponseEntity.badRequest().body(response);
            
         }
     }
 
-    @PutMapping("/categoria")
-    public ResponseEntity<Map<String, String>> editarCategoria(@RequestParam Long id, @RequestBody Categoria categoriaNueva){
+    @PutMapping("/empleado")
+    public ResponseEntity<Map<String, String>> editarEmpleado(@RequestParam Long id, @RequestBody Empleado empleadoNuevo){
         Map<String, String> response = new HashMap<>();
         try {
-            Categoria categoria = categoriaService.buscarCategoriaPorId(id);
-            categoria.setNombreCategoria(categoriaNueva.getNombreCategoria());
-            categoriaService.guardarCategoria(categoria);
+            Empleado empleado = empleadoService.buscarEmpleadoPorId(id);
+            empleado.setNombre(empleadoNuevo.getNombre());
+            empleado.setApellido(empleadoNuevo.getApellido());
+            empleado.setTelefono(empleadoNuevo.getTelefono());
+            empleado.setDireccion(empleadoNuevo.getDireccion());
+            empleado.setDpi(empleadoNuevo.getDpi());
+            empleadoService.guardarEmpleado(empleado);
             response.put("message", "La categoria ha sido modificada");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -73,17 +77,17 @@ public class CategoriaController {
         }    
     }
 
-    @DeleteMapping("/categoria")
-    public ResponseEntity<Map<String, String>> eliminarCategoria(@RequestParam Long id){
+    @DeleteMapping("/empleado")
+    public ResponseEntity<Map<String, String>> eliminarEmpeleado(@RequestParam Long id){
         Map<String, String> response = new HashMap<>();
         try {
-           Categoria categoria = categoriaService.buscarCategoriaPorId(id);
-           categoriaService.eliminarCategoria(categoria); 
-           response.put("message", "categoria eliminada");
+           Empleado empleado = empleadoService.buscarEmpleadoPorId(id);
+           empleadoService.eliminarEmpeleado(empleado); 
+           response.put("message", "Empleado eliminado");
            return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("mess", "Error");
-            response.put("err", "La categoria no se le Elimino");
+            response.put("err", "EL Empleado no se Elimino");
             return ResponseEntity.badRequest().body(response);
         }
     }
