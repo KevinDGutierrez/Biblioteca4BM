@@ -13,4 +13,6 @@ public interface IEmpleadoService {
     public Empleado guardarEmpleado(Empleado empleado);
 
     public void eliminarEmpeleado(Empleado empleado);
+
+    public Boolean verificarDpiDuplicado(Empleado empleado);
 }
